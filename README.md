@@ -5,4 +5,4 @@
 1. id_pw.py와 slack_api.py 수정
 2. send_slack.py 실행
 
-TODO : airflow로 작업을 주기적으로 수행하되, 새로운 이벤트들만 slack message로 
+TODO : airflow로 작업을 주기적으로 수행하되, 새로운 이벤트들만 slack message로 보내기

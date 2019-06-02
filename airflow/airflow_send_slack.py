@@ -1,4 +1,3 @@
-from airflow.operators.python_operator import PythonOperator
 import sys
 import json
 import pandas as pd
@@ -13,7 +12,6 @@ import os
 import datetime
 from airflow import DAG
 from airflow.operators.slack_operator import SlackAPIPostOperator
-from airflow.operators.bash_operator import BashOperator
 
 
 default_args = {

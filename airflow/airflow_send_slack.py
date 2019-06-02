@@ -1,20 +1,36 @@
-
-from id_pw import *
-from selenium.common.exceptions import *
-from slack_api import *
-import datetime
-import os
-from os.path import join, dirname
-from selenium import webdriver
-from bs4 import BeautifulSoup
-import requests
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-import time
-from selenium.webdriver.common.keys import Keys
-import pandas as pd
-import json
+from airflow.operators.python_operator import PythonOperator
 import sys
+import json
+import pandas as pd
+from selenium.webdriver.common.keys import Keys
+import time
+from selenium.webdriver.chrome.options import Options
+import requests
+from bs4 import BeautifulSoup
+from selenium import webdriver
+from os.path import join, dirname
+import os
+import datetime
+from airflow import DAG
+from airflow.operators.slack_operator import SlackAPIPostOperator
+from airflow.operators.bash_operator import BashOperator
+
+
+default_args = {
+    'owner': 'airflow',
+    'depends_on_past': False,
+    'start_date': datetime.datetime(2019, 5, 31),
+    'email': ['airflow@example.com'],
+    'email_on_failure': False,
+    'email_on_retry': False,
+    'retries': 0,
+    'retry_delay': datetime.timedelta(minutes=5),
+}
+
+
+sys.path.append('/Users/soojeong/DSS/github/Joongonara')
+from id_pw import *
+from slack_api import *
 id = id()
 pw = pw()
 webhook_URL = api()
@@ -161,5 +177,8 @@ def send_slack(msg, channel="#dss", username="중고나라봇"):
     print(response)
 
 
-string = crawling()
-send_slack(string)
+dag = DAG(
+    'send_slack', default_args=default_args, schedule_interval='*/20 * * * *', dagrun_timeout=datetime.timedelta(seconds=55), catchup=False)
+
+task1 = PythonOperator(task_id='slack', python_callable=send_slack, op_kwargs={
+                       'msg': crawling()}, dag=dag)

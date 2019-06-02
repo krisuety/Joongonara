@@ -113,9 +113,9 @@ def crawling():
 
         time_gap = datetime.timedelta(hours=9)
         kor_time = utc_time + time_gap
-        five_min_ago = kor_time - datetime.timedelta(minutes=20)
+        twenty_min_ago = kor_time - datetime.timedelta(minutes=20)
         write_time = datetime.datetime.strptime(date, "%Y.%m.%d.%H:%M")
-        if write_time > five_min_ago:
+        if write_time > twenty_min_ago:
             T_F = True
             title_list.append(title)
             writer_list.append(writer)
